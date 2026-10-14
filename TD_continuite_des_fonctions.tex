@@ -36,7 +36,6 @@
 \usepackage{lastpage}
 \usepackage{needspace}
 \usepackage{setspace}
-\usepackage{pifont}
 \usepackage{listings}
 \usepackage[most]{tcolorbox}
 
@@ -87,7 +86,6 @@
 \definecolor{orangeclair}{RGB}{254,243,228}
 \definecolor{gris}{RGB}{90,90,90}
 \definecolor{grisclair}{RGB}{244,244,244}
-\definecolor{or}{RGB}{215,160,20}
 
 % ---------------------------------------------------------------------
 %  Titres des parties
@@ -114,27 +112,17 @@
 \renewcommand{\footrulewidth}{0.4pt}
 
 % ---------------------------------------------------------------------
-%  Niveaux de difficulté
-% ---------------------------------------------------------------------
-\newcommand{\etoile}{\textcolor{or}{\ding{72}}}
-\newcommand{\etoilevide}{\textcolor{or}{\ding{73}}}
-\newcommand{\niveauA}{\etoile\etoilevide\etoilevide}
-\newcommand{\niveauB}{\etoile\etoile\etoilevide}
-\newcommand{\niveauC}{\etoile\etoile\etoile}
-
-% ---------------------------------------------------------------------
 %  Environnement « exercice »
 % ---------------------------------------------------------------------
-\newtcolorbox[auto counter]{exercice}[2][]{
-  enhanced, breakable, colback=white, colframe=bleu, boxrule=0.8pt,
-  arc=2mm, sharp corners=south, left=4mm, right=4mm, top=2.5mm, bottom=2.5mm,
-  colbacktitle=bleuclair, coltitle=bleu, fonttitle=\bfseries,
-  toptitle=1.2mm, bottomtitle=1.2mm,
-  title={Exercice~\thetcbcounter\ifx&#1&\else~--~#1\fi\hfill
-         {\normalfont\small Niveau}~#2},
-  before upper pre={\setlength{\parskip}{6pt}},
-  before pre={\par\needspace{8\baselineskip}},
-  before skip=10pt, after skip=10pt}
+% Titre de l'exercice suivi d'un filet ; le titre n'est jamais séparé
+% du début de l'énoncé.
+\newcounter{exo}
+\newenvironment{exercice}[1][]{%
+  \par\needspace{6\baselineskip}\addvspace{14pt}%
+  \refstepcounter{exo}%
+  {\large\bfseries\color{bleu}Exercice~\theexo\ifx&#1&\else~--~#1\fi\par}%
+  \nobreak\vspace{1pt}{\color{bleu}\hrule height 0.6pt}\nobreak\vspace{6pt}%
+}{\par\addvspace{6pt}}
 
 \newtcolorbox{indication}{
   enhanced, colback=grisclair, colframe=gris, boxrule=0pt, leftrule=1mm,
@@ -205,9 +193,6 @@
 
 \begin{tcolorbox}[enhanced, colback=orangeclair, colframe=orange, boxrule=0.6pt,
   arc=2mm, left=4mm, right=4mm, top=2mm, bottom=2mm]
-\textbf{Niveaux :}\hfill \niveauA\ application directe du cours
-\hfill \niveauB\ approfondissement \hfill \niveauC\ type bac
-
 \textbf{Rappel :} $f$ est continue en $a$ si et seulement si
 $\limg{a}{f(x)}=\limd{a}{f(x)}=f(a)$.
 \end{tcolorbox}
@@ -217,7 +202,7 @@ $\limg{a}{f(x)}=\limd{a}{f(x)}=f(a)$.
 % =====================================================================
 
 % ----------------------------------------------------------- Ex 1
-\begin{exercice}[Lecture graphique]{\niveauA}
+\begin{exercice}[Lecture graphique]
 \begin{minipage}[c]{0.5\linewidth}
 On donne ci-contre la courbe représentative d'une fonction $f$ définie sur
 $\intff{-3}{4}$.
@@ -262,7 +247,7 @@ un point creux \tikz\draw[fill=white] (0,0) circle (2pt); n'appartient pas
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 2
-\begin{exercice}[Continuité en un point par le calcul]{\niveauA}
+\begin{exercice}[Continuité en un point par le calcul]
 Dans chaque cas, étudier la continuité de la fonction au point $a$ indiqué,
 en calculant l'image, la limite à gauche et la limite à droite.
 \begin{multicols}{2}
@@ -283,7 +268,7 @@ Pour la question 4, factoriser le numérateur.
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 3
-\begin{exercice}[Recherche d'un paramètre]{\niveauA}
+\begin{exercice}[Recherche d'un paramètre]
 \begin{enumerate}
   \item Soit $m$ un réel et $f$ la fonction définie sur $\R$ par
   \[
@@ -299,7 +284,7 @@ Pour la question 4, factoriser le numérateur.
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 4
-\begin{exercice}[Deux paramètres]{\niveauB}
+\begin{exercice}[Deux paramètres]
 Soit $a$ et $b$ deux réels et $f$ la fonction définie sur $\R$ par
 \[
   f(x)=\begin{cases}
@@ -318,7 +303,7 @@ Soit $a$ et $b$ deux réels et $f$ la fonction définie sur $\R$ par
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 5
-\begin{exercice}[Autour de la partie entière]{\niveauB}
+\begin{exercice}[Autour de la partie entière]
 On rappelle que, pour tout réel $x$, $E(x)$ désigne l'unique entier relatif $n$
 tel que $n\leqslant x<n+1$.
 
@@ -340,7 +325,7 @@ On considère la fonction $f$ définie sur $\R$ par $f(x)=x-E(x)$.
 % =====================================================================
 
 % ----------------------------------------------------------- Ex 6
-\begin{exercice}[Justifier la continuité]{\niveauA}
+\begin{exercice}[Justifier la continuité]
 Justifier que chacune des fonctions suivantes est continue sur l'intervalle
 (ou les intervalles) indiqué(s).
 \begin{enumerate}
@@ -358,7 +343,7 @@ Pour la question 5, montrer que $x^2+x+1>0$ pour tout réel $x$ (discriminant).
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 7
-\begin{exercice}[Continuité et dérivabilité]{\niveauB}
+\begin{exercice}[Continuité et dérivabilité]
 On considère les fonctions $f$ et $g$ définies sur $\R$ par
 \[
   f(x)=\begin{cases} x^2 & \text{si } x\leqslant 1\\ 2x-1 & \text{si } x>1\end{cases}
@@ -385,7 +370,7 @@ On considère les fonctions $f$ et $g$ définies sur $\R$ par
 % =====================================================================
 
 % ----------------------------------------------------------- Ex 8
-\begin{exercice}[Existence de solutions]{\niveauA}
+\begin{exercice}[Existence de solutions]
 Soit $f$ la fonction définie sur $\R$ par $f(x)=x^3-4x+1$.
 \begin{enumerate}
   \item Montrer que l'équation $f(x)=0$ admet au moins une solution dans
@@ -401,7 +386,7 @@ Soit $f$ la fonction définie sur $\R$ par $f(x)=x^3-4x+1$.
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 9
-\begin{exercice}[Lecture d'un tableau de variations]{\niveauA}
+\begin{exercice}[Lecture d'un tableau de variations]
 \begin{minipage}{\linewidth}
 \setlength{\parskip}{6pt}
 Soit $f$ une fonction continue sur $\intff{-4}{5}$ dont le tableau de variations
@@ -427,7 +412,7 @@ est le suivant :
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 10
-\begin{exercice}[Existence, unicité, encadrement]{\niveauB}
+\begin{exercice}[Existence, unicité, encadrement]
 Soit $f$ la fonction définie sur $\R$ par $f(x)=\e^{x}+x$.
 \begin{enumerate}
   \item Déterminer les limites de $f$ en $-\infty$ et en $+\infty$.
@@ -441,7 +426,7 @@ Soit $f$ la fonction définie sur $\R$ par $f(x)=\e^{x}+x$.
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 11
-\begin{exercice}[Dénombrer des solutions]{\niveauB}
+\begin{exercice}[Dénombrer des solutions]
 Soit $f$ la fonction définie sur $\R$ par $f(x)=2x^3-3x^2-12x+1$.
 \begin{enumerate}
   \item Calculer $f'(x)$ et étudier son signe.
@@ -455,7 +440,7 @@ Soit $f$ la fonction définie sur $\R$ par $f(x)=2x^3-3x^2-12x+1$.
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 12
-\begin{exercice}[Méthode de dichotomie]{\niveauB}
+\begin{exercice}[Méthode de dichotomie]
 Soit $f$ la fonction définie sur $\intff{1}{2}$ par $f(x)=x^3+x-3$.
 \begin{enumerate}
   \item Montrer que l'équation $f(x)=0$ admet une unique solution $\alpha$ dans
@@ -508,7 +493,7 @@ Après $n$ étapes, l'amplitude de l'intervalle est $\dfrac{2-1}{2^n}=\dfrac{1}{
 % =====================================================================
 
 % ----------------------------------------------------------- Ex 13
-\begin{exercice}[TVI sur un intervalle ouvert]{\niveauC}
+\begin{exercice}[TVI sur un intervalle ouvert]
 On souhaite étudier l'équation $(E)$ : $\e^{x}=\dfrac{1}{x}$ sur
 $\intoo{0}{+\infty}$.
 
@@ -526,7 +511,7 @@ $g(x)=\e^{x}-\dfrac{1}{x}$.
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 14
-\begin{exercice}[Problème : fonction auxiliaire]{\niveauC}
+\begin{exercice}[Problème : fonction auxiliaire]
 \textbf{Partie A -- Étude d'une fonction auxiliaire}
 
 Soit $g$ la fonction définie sur $\R$ par $g(x)=\e^{x}-x-2$.
@@ -554,7 +539,7 @@ Soit $f$ la fonction définie sur $\R$ par $f(x)=\e^{x}-\dfrac{x^2}{2}-2x$.
 \end{exercice}
 
 % ----------------------------------------------------------- Ex 15
-\begin{exercice}[Approfondissement : deux résultats classiques]{\niveauC}
+\begin{exercice}[Approfondissement : deux résultats classiques]
 \textbf{Partie A -- Théorème du point fixe}
 
 Soit $f$ une fonction continue sur $\intff{0}{1}$ telle que, pour tout
