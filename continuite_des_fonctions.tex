@@ -114,15 +114,17 @@
   \strut\thesection~--~#1}}}
 \newcommand{\boitesectionetoile}[1]{\colorbox{bleu}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
   \strut#1}}}
+\newif\ifapressection
 \titleformat{\section}
-  {\needspace{9\baselineskip}\normalfont\Large\bfseries\color{white}}
+  {\needspace{16\baselineskip}\global\apressectiontrue\normalfont\Large\bfseries\color{white}}
   {}{0pt}{\boitesection}
 \titleformat{name=\section,numberless}
   {\needspace{9\baselineskip}\normalfont\Large\bfseries\color{white}}
   {}{0pt}{\boitesectionetoile}
 \titlespacing*{\section}{0pt}{18pt}{12pt}
 \titleformat{\subsection}
-  {\needspace{8\baselineskip}\normalfont\large\bfseries\color{bleu}}
+  {\ifapressection\global\apressectionfalse\else\needspace{8\baselineskip}\fi
+   \normalfont\large\bfseries\color{bleu}}
   {\thesubsection}{0.6em}{}[{\color{bleu}\titlerule[0.6pt]}]
 \titlespacing*{\subsection}{0pt}{14pt}{8pt}
 \titleformat{\subsubsection}
@@ -213,8 +215,8 @@
 \newcommand{\intof}[2]{\mathopen{]}#1\,;\,#2\mathclose{]}}
 \newcommand{\limite}[2]{\lim\limits_{#1}#2}
 % limites à gauche et à droite en a
-\newcommand{\limg}[2]{\lim\limits_{\substack{x\to #1\\ x<#1}}#2}
-\newcommand{\limd}[2]{\lim\limits_{\substack{x\to #1\\ x>#1}}#2}
+\newcommand{\limg}[2]{\lim\limits_{x\to #1^-}#2}
+\newcommand{\limd}[2]{\lim\limits_{x\to #1^+}#2}
 
 % ---------------------------------------------------------------------
 %  Code Python
