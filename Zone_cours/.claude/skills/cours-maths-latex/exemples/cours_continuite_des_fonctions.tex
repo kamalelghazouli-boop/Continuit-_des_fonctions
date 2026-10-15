@@ -1,0 +1,1091 @@
+% =====================================================================
+%  Cours : CONTINUITÉ DES FONCTIONS
+%  Terminale — Spécialité Mathématiques
+%  Lycée Français International Jean CHARCOT — EL JADIDA
+%  Année scolaire 2026 - 2027
+%  Compilation : pdflatex (deux passes pour la table des matières)
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------------------
+%  Encodage, langue, polices
+% ---------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage{microtype}
+
+% ---------------------------------------------------------------------
+%  Mathématiques
+% ---------------------------------------------------------------------
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{mathrsfs}
+
+% ---------------------------------------------------------------------
+%  Mise en page
+% ---------------------------------------------------------------------
+\usepackage[a4paper,top=2.3cm,bottom=2.3cm,left=2cm,right=2cm,
+            headheight=15pt]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{array,booktabs}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{lastpage}
+\usepackage{needspace}
+\usepackage{setspace}
+\usepackage{tocloft}
+\setlength{\cftsecnumwidth}{2.6em}
+\setlength{\cftsubsecnumwidth}{2em}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+\renewcommand{\cfttoctitlefont}{\hfill\Large\bfseries\color{bleu}}
+\renewcommand{\cftaftertoctitle}{\hfill\hfill}
+\renewcommand{\cftsecfont}{\bfseries\color{bleu}}
+\renewcommand{\cftsecpagefont}{\bfseries\color{bleu}}
+\setlength{\cftbeforesecskip}{8pt}
+\tocloftpagestyle{fancy}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+
+% ---------------------------------------------------------------------
+%  Figures
+% ---------------------------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,babel}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tkz-tab}
+
+\usepackage[hidelinks]{hyperref}
+
+% ---------------------------------------------------------------------
+%  Interlignage aéré
+% ---------------------------------------------------------------------
+\setstretch{1.25}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt plus 2pt minus 1pt}
+\setlength{\abovedisplayskip}{9pt plus 2pt}
+\setlength{\belowdisplayskip}{9pt plus 2pt}
+
+% Ne jamais isoler une ligne en haut ou en bas de page
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
+
+% Remplissage des pages : aucune coupure « favorisée ».
+% \needspace{h} passe à la page suivante seulement si l'espace restant est < h,
+% sans insérer de pénalité négative (qui créerait des pages à moitié vides).
+\makeatletter
+\renewcommand{\needspace}[1]{\par\begingroup\setlength{\dimen@}{#1}%
+  \dimen@ii\pagegoal\advance\dimen@ii-\pagetotal
+  \ifdim\dimen@>\dimen@ii\ifdim\dimen@ii>\z@\vfil\fi\break\fi\endgroup}
+\@secpenalty=0
+\@beginparpenalty=0
+\@endparpenalty=0
+\@itempenalty=0
+\makeatother
+
+% ---------------------------------------------------------------------
+%  Couleurs
+% ---------------------------------------------------------------------
+\definecolor{bleu}{RGB}{20,55,120}
+\definecolor{bleuclair}{RGB}{232,240,252}
+\definecolor{rouge}{RGB}{170,30,45}
+\definecolor{rougeclair}{RGB}{252,236,236}
+\definecolor{vert}{RGB}{25,115,65}
+\definecolor{vertclair}{RGB}{233,247,238}
+\definecolor{orange}{RGB}{200,100,10}
+\definecolor{orangeclair}{RGB}{254,243,228}
+\definecolor{gris}{RGB}{90,90,90}
+\definecolor{grisclair}{RGB}{244,244,244}
+\definecolor{courbe}{RGB}{30,20,120}
+\definecolor{magenta}{RGB}{170,30,140}
+
+% ---------------------------------------------------------------------
+%  Titres de sections
+%  (\needspace empêche un titre d'être séparé de son texte)
+% ---------------------------------------------------------------------
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+\newcommand{\boitesection}[1]{\colorbox{bleu}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+  \strut\thesection~--~#1}}}
+\newcommand{\boitesectionetoile}[1]{\colorbox{bleu}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+  \strut#1}}}
+\newif\ifapressection
+\titleformat{\section}
+  {\needspace{16\baselineskip}\global\apressectiontrue\normalfont\Large\bfseries\color{white}}
+  {}{0pt}{\boitesection}
+\titleformat{name=\section,numberless}
+  {\needspace{9\baselineskip}\normalfont\Large\bfseries\color{white}}
+  {}{0pt}{\boitesectionetoile}
+\titlespacing*{\section}{0pt}{18pt}{12pt}
+\titleformat{\subsection}
+  {\ifapressection\global\apressectionfalse\else\needspace{8\baselineskip}\fi
+   \normalfont\large\bfseries\color{bleu}}
+  {\thesubsection}{0.6em}{}[{\color{bleu}\titlerule[0.6pt]}]
+\titlespacing*{\subsection}{0pt}{14pt}{8pt}
+\titleformat{\subsubsection}
+  {\needspace{7\baselineskip}\normalfont\normalsize\bfseries\color{bleu!80!black}}
+  {}{0pt}{$\blacktriangleright$~}
+\titlespacing*{\subsubsection}{0pt}{10pt}{6pt}
+
+% ---------------------------------------------------------------------
+%  En-têtes et pieds de page
+% ---------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gris}Cours -- Continuité des fonctions}
+\fancyhead[R]{\small\color{gris}TSpeMath}
+\fancyfoot[L]{\small\color{gris}LFI Jean CHARCOT -- EL JADIDA}
+\fancyfoot[C]{\small\color{gris}\thepage/\pageref{LastPage}}
+\fancyfoot[R]{\small\color{gris}K. EL GHAZOULI}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% ---------------------------------------------------------------------
+%  Environnements (tcolorbox)
+% ---------------------------------------------------------------------
+\tcbset{
+  basecours/.style={enhanced, sharp corners=south,
+    arc=2mm, boxrule=0.8pt, left=3mm, right=3mm, top=2.5mm, bottom=2.5mm,
+    fonttitle=\bfseries, separator sign dash, toptitle=1mm, bottomtitle=1mm,
+    before upper pre={\setlength{\parskip}{6pt}}, before pre={\par\needspace{6\baselineskip}},
+    before skip=12pt, after skip=12pt},
+  baselateral/.style={enhanced, sharp corners, boxrule=0pt, leftrule=1.2mm,
+    left=4mm, right=3mm, top=2.5mm, bottom=2.5mm, fonttitle=\bfseries,
+    attach title to upper, after title={\ :\par\smallskip},
+    before upper pre={\setlength{\parskip}{6pt}}, before pre={\par\needspace{6\baselineskip}},
+    before skip=12pt, after skip=12pt},
+}
+
+\newtcbtheorem[number within=section]{definition}{Définition}{
+  basecours, colback=bleuclair, colframe=bleu, coltitle=white}{def}
+
+\newtcbtheorem[use counter from=definition]{theoreme}{Théorème}{
+  basecours, colback=rougeclair, colframe=rouge, coltitle=white}{thm}
+
+\newtcbtheorem[use counter from=definition]{corollaire}{Corollaire}{
+  basecours, colback=rougeclair, colframe=rouge!80!black, coltitle=white}{cor}
+
+\newtcbtheorem[number within=section]{exemple}{Exemple}{
+  baselateral, breakable, colback=vertclair, colframe=vert, coltitle=vert,
+  separator sign dash}{ex}
+
+\newtcolorbox{remarque}[1][Remarque]{
+  baselateral, colback=grisclair, colframe=gris, coltitle=gris, title={#1}}
+
+\newtcolorbox{methode}[1][]{
+  basecours, sharp corners=all, colback=orangeclair, colframe=orange,
+  coltitle=white, title={Méthode\ifx&#1&\else~--~#1\fi}}
+
+\newtcolorbox{demo}[1][]{
+  enhanced, breakable, colback=white, colframe=gris!60, boxrule=0.4pt,
+  sharp corners, left=4mm, right=3mm, top=2.5mm, bottom=2.5mm,
+  title={Démonstration}, attach title to upper, after title={\ :\par\smallskip},
+  coltitle=gris, fonttitle=\bfseries\itshape,
+  before upper pre={\setlength{\parskip}{6pt}}, before pre={\par\needspace{6\baselineskip}},
+  before skip=12pt, after skip=12pt, #1}
+
+\newtcolorbox{programme}{
+  enhanced, colback=bleuclair!50, colframe=bleu, boxrule=0.6pt, arc=2mm,
+  title={Extrait du programme officiel (B.O.) -- Terminale spécialité},
+  coltitle=white, colbacktitle=bleu, fonttitle=\bfseries,
+  left=3mm, right=3mm, top=2mm, bottom=2mm}
+
+
+% Étapes de résolution : une étape par ligne
+\newlist{etapes}{enumerate}{1}
+\setlist[etapes]{label={\color{vert}\bfseries Étape \arabic*.}, leftmargin=0pt,
+  labelindent=0pt, itemindent=*, labelsep=0.5em, itemsep=6pt, topsep=6pt,
+  parsep=4pt}
+
+% ---------------------------------------------------------------------
+%  Macros mathématiques
+% ---------------------------------------------------------------------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Cf}{\mathscr{C}_f}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\intff}[2]{\mathopen{[}#1\,;\,#2\mathclose{]}}
+\newcommand{\intoo}[2]{\mathopen{]}#1\,;\,#2\mathclose{[}}
+\newcommand{\intfo}[2]{\mathopen{[}#1\,;\,#2\mathclose{[}}
+\newcommand{\intof}[2]{\mathopen{]}#1\,;\,#2\mathclose{]}}
+\newcommand{\limite}[2]{\lim\limits_{#1}#2}
+% limites à gauche et à droite en a
+\newcommand{\limg}[2]{\lim\limits_{x\to #1^-}#2}
+\newcommand{\limd}[2]{\lim\limits_{x\to #1^+}#2}
+
+% ---------------------------------------------------------------------
+%  Code Python
+% ---------------------------------------------------------------------
+\lstset{
+  language=Python, basicstyle=\ttfamily\small\linespread{1}\selectfont,
+  keywordstyle=\color{bleu}\bfseries,
+  commentstyle=\color{vert}\itshape, stringstyle=\color{rouge},
+  numbers=left, numberstyle=\tiny\color{gris}, frame=single,
+  rulecolor=\color{gris!50}, backgroundcolor=\color{grisclair},
+  showstringspaces=false, columns=fullflexible, keepspaces=true,
+  literate={é}{{\'e}}1 {è}{{\`e}}1 {à}{{\`a}}1 {ê}{{\^e}}1
+}
+
+\setlist[itemize]{label=\textcolor{bleu}{$\bullet$}, leftmargin=*, itemsep=5pt,
+  topsep=5pt}
+\setlist[enumerate]{leftmargin=*, itemsep=5pt, topsep=5pt}
+
+% =====================================================================
+\begin{document}
+% =====================================================================
+
+% ---------------------------------------------------------------------
+%  PAGE DE GARDE
+% ---------------------------------------------------------------------
+\begin{titlepage}
+\setstretch{1}
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[bleu] (current page.north west) rectangle
+              ([yshift=-0.9cm]current page.north east);
+  \fill[bleu] (current page.south west) rectangle
+              ([yshift=0.9cm]current page.south east);
+  \draw[bleu, line width=1.2pt]
+    ([xshift=1.2cm,yshift=-1.4cm]current page.north west) rectangle
+    ([xshift=-1.2cm,yshift=1.4cm]current page.south east);
+\end{tikzpicture}
+
+\centering
+\vspace*{0.6cm}
+
+{\Large\bfseries\color{bleu} Lycée Français International Jean CHARCOT - EL JADIDA\par}
+\vspace{0.5cm}
+{\large Année scolaire 2026 - 2027\par}
+\vspace{0.3cm}
+{\large\bfseries Niveau : Terminale Spécialité Mathématiques\par}
+
+\vspace{0.8cm}
+{\color{bleu}\rule{0.85\linewidth}{1.2pt}}
+
+\vspace{2.6cm}
+
+\begin{tcolorbox}[enhanced, width=0.9\linewidth, colback=bleuclair,
+  colframe=bleu, boxrule=1.5pt, arc=3mm, halign=center,
+  top=8mm, bottom=8mm, drop shadow]
+  {\fontsize{32}{40}\selectfont\bfseries\color{bleu}
+   CONTINUITÉ\\[3mm] DES\hspace{0.4em}FONCTIONS\par}
+  \vspace{4mm}
+  {\large\itshape Cours, propriétés, démonstrations et exemples d'application\par}
+\end{tcolorbox}
+
+\vspace{1.4cm}
+
+% Illustration : théorème des valeurs intermédiaires
+\begin{tikzpicture}
+\begin{axis}[axis lines=middle, width=10cm, height=6cm,
+  xmin=0, xmax=6.2, ymin=0, ymax=3.6, xtick=\empty, ytick=\empty,
+  xlabel={$x$}, ylabel={$y$}, clip=false,
+  every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
+  every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south}]
+  \addplot[domain=1:5.6, samples=150, very thick, rouge]
+     {2-sin(deg(pi*(x-2)/1.4))};
+  \addplot[domain=0:6.2, thick, vert] {2};
+  \foreach \c in {2,3.4,4.8}{
+    \edef\temp{\noexpand\draw[dashed, gris] (axis cs:\c,0) -- (axis cs:\c,2);
+               \noexpand\fill[bleu] (axis cs:\c,2) circle (2pt);}
+    \temp
+  }
+  \node[left] at (axis cs:0,2) {$k$};
+  \node[above, rouge] at (axis cs:5.6,1.05) {$\Cf$};
+\end{axis}
+\end{tikzpicture}
+
+\vfill
+{\large Enseignant : K. EL GHAZOULI\par}
+\vspace{0.6cm}
+\end{titlepage}
+
+% ---------------------------------------------------------------------
+%  SOMMAIRE ET PROGRAMME
+% ---------------------------------------------------------------------
+\setcounter{page}{1}
+\begingroup
+\hypersetup{linkcolor=bleu}
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+\endgroup
+
+\vspace{0.8cm}
+
+\begin{programme}
+\textbf{Contenus}
+\begin{itemize}
+  \item Fonction continue en un point, sur un intervalle.
+        Toute fonction dérivable est continue.
+  \item Théorème des valeurs intermédiaires. Cas des fonctions continues
+        strictement monotones.
+\end{itemize}
+\textbf{Capacités attendues}
+\begin{itemize}
+  \item Étudier les solutions d'une équation du type $f(x)=k$ :
+        existence, unicité, encadrement.
+\end{itemize}
+\textbf{Exemple d'algorithme} : méthode de dichotomie.
+
+\textbf{Approfondissement} : exemples de fonctions discontinues (fonction partie
+entière), de fonctions continues non dérivables.
+\end{programme}
+
+\begin{remarque}[Convention]
+Dans tout ce chapitre, $I$ désigne un intervalle de $\R$ non vide et non réduit à
+un point, et $\Cf$ la courbe représentative d'une fonction $f$ dans un repère
+du plan.
+\end{remarque}
+
+\newpage
+% =====================================================================
+\section{Continuité d'une fonction}
+% =====================================================================
+
+\subsection{Définition}
+
+Soit $f$ une fonction définie sur un intervalle $I$ de $\R$.
+
+Intuitivement, dire que $f$ est continue sur $I$ signifie que sa courbe
+représentative peut être tracée \emph{en un seul morceau}, sans lever le crayon :
+la courbe ne présente aucun saut, aucun trou.
+
+Mathématiquement, cela se traduit de la manière suivante.
+
+\begin{definition}{Continuité en un point, sur un intervalle}{continuite}
+Soit $f$ une fonction définie sur un intervalle $I$ de $\R$ et $a$ un réel de $I$
+(qui n'est pas une borne de $I$).
+\begin{itemize}
+  \item On dit que $f$ est \textbf{continue en $a$} lorsque la limite à gauche
+  en $a$ et la limite à droite en $a$ sont \textbf{égales} à $f(a)$ :
+  \[
+    \limg{a}{f(x)} \;=\; \limd{a}{f(x)} \;=\; f(a).
+  \]
+  Sinon, on dit que $f$ est \textbf{discontinue} en $a$.
+  \item On dit que $f$ est \textbf{continue sur $I$} lorsque $f$ est continue
+  en \textbf{tout réel $a$ de $I$}.
+\end{itemize}
+\end{definition}
+
+\begin{remarque}[Pour vérifier la continuité en $a$]
+On calcule séparément les trois nombres suivants, puis on les compare :
+\begin{enumerate}[label=\textcolor{bleu}{\textbf{\arabic*.}}]
+  \item l'image $f(a)$ ;
+  \item la limite à gauche $\limg{a}{f(x)}$ ;
+  \item la limite à droite $\limd{a}{f(x)}$.
+\end{enumerate}
+Si ces trois nombres sont égaux, $f$ est continue en $a$. Dans ce cas, on écrit
+simplement $\limite{x\to a}{f(x)}=f(a)$.
+\end{remarque}
+
+\begin{remarque}[Cas d'une borne]
+Si $a$ est une borne de $I$ (par exemple $I=\intff{a}{b}$), on ne considère que la
+limite à droite en $a$ : $f$ est continue en $a$ si $\limd{a}{f(x)}=f(a)$.
+
+De même en $b$, avec la limite à gauche.
+\end{remarque}
+
+\subsubsection{Illustration graphique}
+
+Soit $f$ une fonction définie sur un intervalle $I$ de $\R$ et $a$ un réel de $I$.
+
+On note $\Cf$ la courbe représentative de la fonction $f$ et $A$ le point de la
+courbe $\Cf$ d'abscisse $a$. Pour tout réel $x$ de l'intervalle $I$, on considère
+le point $M$ de la courbe $\Cf$ d'abscisse $x$.
+
+\begin{center}
+\setstretch{1.1}
+\begin{tabular}{@{}m{0.48\linewidth}@{\hspace{0.03\linewidth}}m{0.48\linewidth}@{}}
+% ------------------ Figure 1 : fonction continue
+\centering
+\begin{tikzpicture}
+\begin{axis}[axis lines=middle, width=7.6cm, height=6.2cm,
+  xmin=-0.6, xmax=4.9, ymin=-0.8, ymax=3.6, xtick=\empty, ytick=\empty,
+  xlabel={$x$}, ylabel={$y$}, clip=false,
+  every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
+  every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south}]
+  \addplot[domain=-0.5:4.6, samples=200, thick, courbe]
+     {x*(3.6-x)*exp(-0.35*(x-1.5)^2)};
+  \draw[dashed, bleu] (axis cs:0,2.169) -- (axis cs:2.4,2.169) -- (axis cs:2.4,0);
+  \draw[dashed, magenta] (axis cs:0,1.702) -- (axis cs:2.6,1.702) -- (axis cs:2.6,0);
+  \fill[bleu] (axis cs:2.4,2.169) circle (1.6pt);
+  \fill[magenta] (axis cs:2.6,1.702) circle (1.6pt);
+  \node[left, bleu] at (axis cs:0,2.169) {$f(x)$};
+  \node[left, magenta] at (axis cs:0,1.702) {$f(a)$};
+  \node[below, bleu] at (axis cs:2.35,0) {$x$};
+  \node[below, magenta] at (axis cs:2.7,0) {$a$};
+  \node[above right, bleu] at (axis cs:2.4,2.169) {$M$};
+  \node[above right, magenta] at (axis cs:2.6,1.702) {$A$};
+  \node[below left] at (axis cs:0,0) {$O$};
+  \node[below, courbe] at (axis cs:4.6,-0.2) {$\Cf$};
+\end{axis}
+\end{tikzpicture}
+&
+% ------------------ Figure 2 : fonction discontinue en a
+\centering
+\begin{tikzpicture}
+\begin{axis}[axis lines=middle, width=7.6cm, height=6.2cm,
+  xmin=-0.6, xmax=4.9, ymin=-0.8, ymax=3.6, xtick=\empty, ytick=\empty,
+  xlabel={$x$}, ylabel={$y$}, clip=false,
+  every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
+  every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south}]
+  \addplot[domain=-0.5:2.6, samples=200, thick, courbe]
+     {x*(3.6-x)*exp(-0.35*(x-1.5)^2)};
+  \addplot[domain=2.6:4.8, samples=60, thick, courbe] {0.5+0.25*(x-2.6)^2};
+  \draw[thick, courbe, fill=white] (axis cs:2.6,1.702) circle (2pt);
+  \draw[dashed, bleu] (axis cs:0,2.169) -- (axis cs:2.4,2.169) -- (axis cs:2.4,0);
+  \draw[dashed, magenta] (axis cs:0,0.5) -- (axis cs:2.6,0.5) -- (axis cs:2.6,0);
+  \fill[bleu] (axis cs:2.4,2.169) circle (1.6pt);
+  \fill[magenta] (axis cs:2.6,0.5) circle (1.8pt);
+  \node[left, bleu] at (axis cs:0,2.169) {$f(x)$};
+  \node[left, magenta] at (axis cs:0,0.5) {$f(a)$};
+  \node[below, bleu] at (axis cs:2.35,0) {$x$};
+  \node[below, magenta] at (axis cs:2.7,0) {$a$};
+  \node[above right, bleu] at (axis cs:2.4,2.169) {$M$};
+  \node[above right, magenta] at (axis cs:2.6,0.5) {$A$};
+  \node[below left] at (axis cs:0,0) {$O$};
+  \node[above, courbe] at (axis cs:4.7,1.65) {$\Cf$};
+\end{axis}
+\end{tikzpicture}
+\tabularnewline[2mm]
+\textbf{La fonction $f$ est continue.}
+
+Pour tout réel $a$ de $I$, on peut rendre $f(x)$ aussi proche que l'on veut
+de $f(a)$ pourvu que $x$ soit suffisamment proche de $a$.
+&
+\textbf{La fonction $f$ n'est pas continue en $a$.}
+
+La courbe $\Cf$ présente un saut au point d'abscisse $a$. Le point $M$ n'est pas
+proche du point $A$ quand $x$ est proche de $a$ (par la gauche).
+\end{tabular}
+\end{center}
+
+\subsection{Exemples d'application}
+
+\begin{exemple}{Continuité en un point d'une fonction polynôme}{}
+Soit $f$ la fonction définie sur $\R$ par $f(x)=x^2-3x+1$.
+Montrons que $f$ est continue en $2$.
+
+\begin{etapes}
+  \item Image : $f(2)=2^2-3\times 2+1=-1$.
+  \item Limite à gauche : par somme et produit de limites,
+        $\limg{2}{f(x)}=2^2-3\times 2+1=-1$.
+  \item Limite à droite : de même, $\limd{2}{f(x)}=-1$.
+\end{etapes}
+
+\textbf{Conclusion :} $\limg{2}{f(x)}=\limd{2}{f(x)}=f(2)=-1$, donc la fonction
+$f$ est continue en $2$.
+\end{exemple}
+
+\begin{exemple}{Fonction définie par morceaux -- recherche d'un paramètre}{}
+Soit $m$ un réel et $f$ la fonction définie sur $\R$ par
+\[
+  f(x)=\begin{cases}
+    2x+1 & \text{si } x<1,\\[2pt]
+    x^2+m & \text{si } x\geqslant 1.
+  \end{cases}
+\]
+Sur chacun des intervalles $\intoo{-\infty}{1}$ et $\intoo{1}{+\infty}$, $f$
+est une fonction polynôme ; donc $f$ est continue sur
+$\intoo{-\infty}{1}\;\cup\;\intoo{1}{+\infty}$ (voir partie~\ref{sec:usuelles}).
+
+Étudions la continuité en $1$.
+\begin{etapes}
+  \item Image : $f(1)=1^2+m=1+m$.
+  \item Limite à gauche : $\limg{1}{f(x)}=\limg{1}{(2x+1)}=3$.
+  \item Limite à droite : $\limd{1}{f(x)}=\limd{1}{(x^2+m)}=1+m$.
+  \item Comparaison : $f$ est continue en $1$ si et seulement si $3=1+m$,
+        c'est-à-dire $m=2$.
+\end{etapes}
+
+\textbf{Conclusion :} $f$ est continue sur $\R$ si et seulement si $m=2$.
+\end{exemple}
+
+\begin{exemple}{Une fonction discontinue : la fonction partie entière}{}
+Pour tout réel $x$, il existe un unique entier relatif $n$ tel que
+$n\leqslant x<n+1$ ; on l'appelle \textbf{partie entière} de $x$ et on le note
+$E(x)$ (en Python : \texttt{floor(x)}).
+
+Par exemple : $E(2{,}7)=2$, \ $E(3)=3$, \ $E(-1{,}2)=-2$.
+
+\begin{minipage}[c]{0.55\linewidth}
+Étudions la continuité en $1$.
+\begin{etapes}
+  \item Image : $E(1)=1$.
+  \item Pour $x\in\intfo{0}{1}$, $E(x)=0$, donc $\limg{1}{E(x)}=0$.
+  \item Pour $x\in\intfo{1}{2}$, $E(x)=1$, donc $\limd{1}{E(x)}=1$.
+\end{etapes}
+
+\textbf{Conclusion :} $\limg{1}{E(x)}\neq\limd{1}{E(x)}$, donc la fonction $E$
+\textbf{n'est pas continue en $1$}.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.41\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.62]
+  \draw[gris!30] (-2.5,-2.5) grid (3.5,3.5);
+  \draw[-{Stealth}] (-2.7,0) -- (3.8,0) node[right] {$x$};
+  \draw[-{Stealth}] (0,-2.7) -- (0,3.8) node[above] {$y$};
+  \foreach \k in {-2,-1,1,2,3}{
+    \node[below, font=\scriptsize] at (\k,0) {$\k$};
+    \node[left,  font=\scriptsize] at (0,\k) {$\k$};}
+  \node[below left, font=\scriptsize] at (0,0) {$O$};
+  \foreach \n in {-2,-1,0,1,2}{
+    \draw[very thick, rouge] (\n,\n) -- (\n+1,\n);
+    \fill[rouge] (\n,\n) circle (2.6pt);
+    \draw[thick, rouge, fill=white] (\n+1,\n) circle (2.6pt);}
+  \node[rouge, above] at (2.2,3.4) {$y=E(x)$};
+\end{tikzpicture}
+\end{minipage}
+
+Plus généralement, $E$ est discontinue en tout entier relatif $n$, mais elle est
+continue sur chaque intervalle $\intfo{n}{n+1}$ (où elle est constante).
+La courbe présente un « saut » en chaque entier.
+\end{exemple}
+
+% =====================================================================
+\section{Continuité des fonctions usuelles et opérations}\label{sec:usuelles}
+% =====================================================================
+
+\subsection{Continuité des fonctions de référence}
+
+On a le tableau de continuité des fonctions de référence suivant (résultats admis) :
+
+\begin{center}
+\setstretch{1}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|>{\centering\arraybackslash}m{6.6cm}|>{\centering\arraybackslash}m{6.6cm}|}
+\hline
+\rowcolor{bleuclair}\textbf{Fonctions usuelles} & \textbf{Intervalle(s) de continuité} \\ \hline
+$f(x)=x^n$, \quad $n\in\N$ & $\R$ \\ \hline
+$f(x)=\dfrac{1}{x^n}$, \quad $n\in\N^*$ & $\intoo{-\infty}{0}\;\cup\;\intoo{0}{+\infty}$ \\ \hline
+$f(x)=\sqrt{x}$ & $\intfo{0}{+\infty}$ \\ \hline
+$f(x)=\lvert x\rvert$ & $\R$ \\ \hline
+$f(x)=\e^x$ & $\R$ \\ \hline
+$f(x)=\sin x$ \ et \ $f(x)=\cos x$ & $\R$ \\ \hline
+$f(x)=\ln x$ \ {\small(chapitre « Logarithme »)} & $\intoo{0}{+\infty}$ \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{remarque}
+Il en découle (avec le théorème suivant) que toute \textbf{fonction polynôme}
+est continue sur $\R$, et que toute \textbf{fonction rationnelle} (quotient de
+deux polynômes) est continue sur chacun des intervalles où elle est définie.
+\end{remarque}
+
+\subsection{Opérations sur les fonctions continues}
+
+\begin{theoreme}{Opérations}{operations}
+Soit $k$ un réel. Soit $f$ et $g$ deux fonctions définies sur un intervalle $I$
+et soit $a\in I$. Si $f$ et $g$ sont continues en $a$, alors :
+\begin{itemize}
+  \item $f+g$, \ $k\times f$ \ et \ $f\times g$ sont continues en $a$ ;
+  \item $\dfrac{f}{g}$ est continue en $a$, à condition que $g(a)\neq 0$.
+\end{itemize}
+\textbf{Composition :} si $f$ est continue en $a$ et si $g$ est définie sur un
+intervalle $J$ contenant $f(I)$ et continue en $f(a)$, alors $g\circ f$ est
+continue en $a$.
+
+Ces résultats s'étendent aux fonctions continues sur un intervalle.
+\end{theoreme}
+
+\subsection{Exemples d'application}
+
+\begin{exemple}{Fonction rationnelle}{}
+Soit $f$ la fonction définie par $f(x)=\dfrac{3x^2-1}{x-2}$.
+\begin{etapes}
+  \item Le numérateur et le dénominateur sont des fonctions polynômes,
+        donc continues sur $\R$.
+  \item Le dénominateur s'annule uniquement en $x=2$.
+\end{etapes}
+\textbf{Conclusion :} par quotient, $f$ est continue sur
+$\intoo{-\infty}{2}\;\cup\;\intoo{2}{+\infty}$.
+\end{exemple}
+
+\begin{exemple}{Composition}{}
+Soit $g$ la fonction définie sur $\R$ par $g(x)=\sqrt{x^2+1}$.
+\begin{etapes}
+  \item La fonction $u:x\longmapsto x^2+1$ est continue sur $\R$ (polynôme).
+  \item Pour tout réel $x$, $u(x)\geqslant 1>0$, donc $u(\R)\subset\intfo{0}{+\infty}$.
+  \item La fonction racine carrée est continue sur $\intfo{0}{+\infty}$.
+\end{etapes}
+\textbf{Conclusion :} par composition, $g=\sqrt{\phantom{x}}\circ u$ est continue
+sur $\R$.
+\end{exemple}
+
+\begin{exemple}{Produit et composition}{}
+Soit $h$ la fonction définie sur $\R$ par $h(x)=\e^{-x}\cos(2x)$.
+\begin{etapes}
+  \item $x\mapsto -x$ et $\exp$ sont continues sur $\R$, donc, par composition,
+        $x\mapsto \e^{-x}$ est continue sur $\R$.
+  \item $x\mapsto 2x$ et $\cos$ sont continues sur $\R$, donc, par composition,
+        $x\mapsto\cos(2x)$ est continue sur $\R$.
+\end{etapes}
+\textbf{Conclusion :} par produit, $h$ est continue sur $\R$.
+\end{exemple}
+
+% =====================================================================
+\section{Continuité et dérivabilité}
+% =====================================================================
+
+\subsection{Théorème}
+
+\begin{theoreme}{Dérivabilité implique continuité}{derivcont}
+Soit $f$ une fonction définie sur un intervalle $I$ et soit $a\in I$.
+\begin{itemize}
+  \item Si $f$ est \textbf{dérivable en $a$}, alors la fonction $f$ est
+        \textbf{continue en $a$}.
+  \item Si $f$ est \textbf{dérivable sur $I$}, alors la fonction $f$ est
+        \textbf{continue sur $I$}.
+\end{itemize}
+\end{theoreme}
+
+\begin{demo}
+Supposons $f$ dérivable en $a$.
+
+Pour tout réel $h\neq 0$ tel que $a+h\in I$, on peut écrire :
+\[
+  f(a+h) = f(a) + h\times\frac{f(a+h)-f(a)}{h}.
+\]
+Or $\limite{h\to 0}{\dfrac{f(a+h)-f(a)}{h}}=f'(a)$, qui est un nombre réel, et
+$\limite{h\to 0}{h}=0$.
+
+Donc, par produit : $\limite{h\to 0}{\left(h\times\dfrac{f(a+h)-f(a)}{h}\right)}
+=0\times f'(a)=0$.
+
+Ainsi $\limite{h\to 0}{f(a+h)}=f(a)$, que $h$ tende vers $0$ par valeurs
+négatives ou positives : les limites à gauche et à droite de $f$ en $a$ sont
+égales à $f(a)$.
+
+Donc $f$ est continue en $a$.
+\end{demo}
+
+\subsection{La réciproque est fausse}
+
+\begin{minipage}[c]{0.6\linewidth}
+La réciproque de ce théorème est fausse : une fonction peut être continue en un
+point $a$ sans pour autant y être dérivable.
+
+C'est le cas de la fonction valeur absolue : $f(x)=\lvert x\rvert$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.36\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.58]
+  \draw[gris!30] (-3.5,-0.8) grid (3.5,3.8);
+  \draw[-{Stealth}] (-3.7,0) -- (3.8,0);
+  \draw[-{Stealth}] (0,-0.9) -- (0,4);
+  \foreach \k in {-3,-2,-1,1,2,3}{\node[below, font=\scriptsize] at (\k,0) {$\k$};}
+  \foreach \k in {1,2,3}{\node[left, font=\scriptsize] at (0,\k) {$\k$};}
+  \node[below left, font=\scriptsize] at (0,0) {$O$};
+  \draw[thick, rouge] (-3.6,3.6) -- (0,0) -- (3.6,3.6);
+  \draw[-{Stealth}, very thick, bleu] (0,0) -- (-1,1);
+  \draw[-{Stealth}, very thick, bleu] (0,0) -- (1,1);
+  \node[bleu, left, font=\small, fill=white, inner sep=1pt]  at (-1.05,1.05) {pente $-1$};
+  \node[bleu, right, font=\small, fill=white, inner sep=1pt] at (1.05,1.05) {pente $+1$};
+\end{tikzpicture}
+
+{\small\setstretch{1} La courbe est en « un seul morceau » \\ et possède un point
+anguleux en $O$.\par}
+\end{minipage}
+
+\begin{demo}
+\textbf{$f$ est continue en $0$.}
+
+Pour $x<0$, $f(x)=-x$, donc $\limg{0}{f(x)}=0$.
+
+Pour $x>0$, $f(x)=x$, donc $\limd{0}{f(x)}=0$.
+
+Comme $f(0)=0$, on a $\limg{0}{f(x)}=\limd{0}{f(x)}=f(0)$ : $f$ est continue en $0$.
+
+\textbf{$f$ n'est pas dérivable en $0$.}
+
+Pour $h\neq 0$ :
+$\dfrac{f(0+h)-f(0)}{h}=\dfrac{\lvert h\rvert}{h}=
+  \begin{cases} 1 & \text{si } h>0,\\ -1 & \text{si } h<0.\end{cases}$
+
+Le taux de variation admet deux limites différentes à droite ($1$) et à gauche
+($-1$) en $0$ : il n'a donc pas de limite en $0$, et $f$ n'est pas dérivable en $0$.
+\end{demo}
+
+\subsection{Exemples d'application}
+
+\begin{exemple}{Utiliser la dérivabilité pour justifier la continuité}{}
+Soit $f$ la fonction définie sur $\R$ par $f(x)=(2x-1)\e^{x}$.
+\begin{etapes}
+  \item $x\mapsto 2x-1$ et $x\mapsto\e^x$ sont dérivables sur $\R$, donc, par
+        produit, $f$ est dérivable sur $\R$.
+  \item D'après le théorème~\ref{thm:derivcont}, toute fonction dérivable sur $\R$
+        est continue sur $\R$.
+\end{etapes}
+\textbf{Conclusion :} $f$ est continue sur $\R$.
+\end{exemple}
+
+\begin{exemple}{La fonction racine carrée en $0$}{}
+Soit $f$ la fonction définie sur $\intfo{0}{+\infty}$ par $f(x)=\sqrt{x}$.
+\begin{etapes}
+  \item Continuité en $0$ ($0$ est une borne, on regarde la limite à droite) :
+        $\limd{0}{\sqrt{x}}=0=f(0)$, donc $f$ est continue en $0$.
+  \item Dérivabilité en $0$ : pour $h>0$,
+  \[
+    \frac{f(0+h)-f(0)}{h}=\frac{\sqrt{h}}{h}=\frac{1}{\sqrt{h}}
+    \xrightarrow[h\to 0^+]{}+\infty .
+  \]
+  Le taux de variation n'a pas de limite finie : $f$ n'est pas dérivable en $0$.
+\end{etapes}
+\textbf{Interprétation graphique :} la courbe de la fonction racine carrée admet en
+$O$ une tangente verticale.
+\end{exemple}
+
+% =====================================================================
+\section{Continuité et résolution d'équations}
+% =====================================================================
+
+\subsection{Théorème des valeurs intermédiaires}
+
+\begin{theoreme}{Théorème des valeurs intermédiaires (TVI) -- cas général}{tvi}
+Soit $f$ une fonction \textbf{continue} sur un intervalle $\intff{a}{b}$ et $k$
+un réel compris entre $f(a)$ et $f(b)$.
+
+Alors il existe (au moins) un réel $c$ dans $\intff{a}{b}$ tel que $f(c)=k$.
+
+Autrement dit, l'équation $f(x)=k$ admet au moins une solution dans $\intff{a}{b}$.
+\end{theoreme}
+
+\begin{remarque}
+Ce théorème (admis) résulte du fait que \textbf{l'image d'un intervalle} de $\R$
+par une fonction continue est \textbf{un intervalle} de $\R$.
+\end{remarque}
+
+\subsubsection{Illustration graphique}
+
+\begin{minipage}[c]{0.52\linewidth}
+Ci-contre, $k$ est bien compris entre $f(a)$ et $f(b)$.
+
+L'équation $f(x)=k$ admet donc des solutions.
+
+\textbf{L'existence de $c$ ne veut pas dire qu'il soit unique.}
+
+Ici, il existe 3 valeurs : $c_1$, $c_2$ et $c_3$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\linewidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[axis lines=middle, width=7.2cm, height=5cm,
+  xmin=0, xmax=6.2, ymin=0, ymax=3.5, xtick=\empty, ytick=\empty, clip=false,
+  axis line style={-{Stealth}}]
+  \draw[line width=3pt, rouge] (axis cs:0,1.025) -- (axis cs:0,2.782);
+  \draw[line width=3pt, bleu] (axis cs:1,0) -- (axis cs:5.6,0);
+  \addplot[domain=0:6.2, thick, vert] {2};
+  \addplot[domain=1:5.6, samples=150, thick, black]
+     {2-sin(deg(pi*(x-2)/1.4))};
+  \draw[dashed] (axis cs:0,2.782) -- (axis cs:1,2.782) -- (axis cs:1,0);
+  \draw[dashed] (axis cs:0,1.025) -- (axis cs:5.6,1.025) -- (axis cs:5.6,0);
+  \foreach \c in {2,3.4,4.8}{
+    \edef\temp{\noexpand\draw[dashed] (axis cs:\c,0) -- (axis cs:\c,2);}
+    \temp}
+  \node[left] at (axis cs:0,2.782) {$f(a)$};
+  \node[left] at (axis cs:0,2) {$k$};
+  \node[left] at (axis cs:0,1.025) {$f(b)$};
+  \node[below] at (axis cs:1,0) {$a$};
+  \node[below] at (axis cs:2,0) {$c_1$};
+  \node[below] at (axis cs:3.4,0) {$c_2$};
+  \node[below] at (axis cs:4.8,0) {$c_3$};
+  \node[below] at (axis cs:5.6,0) {$b$};
+  \node[below left] at (axis cs:0,0) {$O$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+\begin{exemple}{Existence d'une solution}{}
+Montrons que l'équation $\cos x = x$ admet au moins une solution dans
+$\intff{0}{\frac{\pi}{2}}$.
+
+Posons $h(x)=\cos x - x$.
+\begin{etapes}
+  \item Continuité : $h$ est continue sur $\intff{0}{\frac{\pi}{2}}$
+        (différence de fonctions continues).
+  \item Valeurs aux bornes : $h(0)=1>0$ \ et \
+        $h\!\left(\frac{\pi}{2}\right)=0-\frac{\pi}{2}<0$.
+  \item Donc $0$ est compris entre $h\big(\frac{\pi}{2}\big)$ et $h(0)$.
+\end{etapes}
+\textbf{Conclusion :} d'après le TVI, il existe au moins un réel
+$c\in\intff{0}{\frac{\pi}{2}}$ tel que $h(c)=0$, c'est-à-dire $\cos c=c$.
+\end{exemple}
+
+\subsection{Extension aux intervalles ouverts}
+
+Il est également possible d'utiliser les limites dans le théorème des valeurs
+intermédiaires.
+
+\begin{theoreme}{TVI avec des limites}{tvilim}
+Soit $f$ une fonction continue sur un intervalle $\intoo{a}{b}$ (avec $a$ et $b$
+réels ou infinis) telle que les limites $\limd{a}{f(x)}$ et $\limg{b}{f(x)}$
+existent (finies ou infinies).
+
+Soit $k$ un réel strictement compris entre ces deux limites.
+
+Alors il existe (au moins) un réel $c$ dans $\intoo{a}{b}$ tel que $f(c)=k$.
+\end{theoreme}
+
+\begin{exemple}{}{}
+Soit $f$ la fonction polynôme de degré $3$ définie sur $\R$ par $f(x)=x^3+3$.
+\begin{etapes}
+  \item Continuité : $f$ est continue sur $\R$ (fonction polynôme).
+  \item Limites : $\limite{x\to+\infty}{f(x)}=+\infty$ \ et \
+        $\limite{x\to-\infty}{f(x)}=-\infty$.
+  \item Or $0\in\intoo{-\infty}{+\infty}$.
+\end{etapes}
+\textbf{Conclusion :} d'après le théorème des valeurs intermédiaires, il existe
+un réel $x$ tel que $f(x)=0$.
+\end{exemple}
+
+\subsection{Cas des fonctions strictement monotones}
+
+\begin{corollaire}{Corollaire du TVI -- théorème de la bijection}{bijection}
+Soit $f$ une fonction \textbf{continue} et \textbf{strictement monotone} sur
+$I=\intff{a}{b}$.
+
+Pour tout réel $k$ compris entre $f(a)$ et $f(b)$, l'équation $f(x)=k$ admet
+\textbf{une unique solution} dans $I$.
+\end{corollaire}
+
+\begin{minipage}[c]{0.55\linewidth}
+\begin{demo}[unbreakable]
+\textbf{Existence :} c'est le TVI.
+
+\textbf{Unicité :} supposons qu'il existe deux solutions $c<c'$.
+
+Par stricte monotonie, $f(c)<f(c')$ ou $f(c)>f(c')$.
+
+Cela contredit $f(c)=f(c')=k$.
+\end{demo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.42\linewidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[axis lines=middle, width=6.8cm, height=5cm,
+  xmin=0, xmax=6.3, ymin=0, ymax=4.9, xtick=\empty, ytick=\empty, clip=false,
+  axis line style={-{Stealth}}]
+  \draw[line width=3pt, rouge] (axis cs:0,0.92) -- (axis cs:0,4.43);
+  \draw[line width=3pt, bleu] (axis cs:1,0) -- (axis cs:5.5,0);
+  \addplot[domain=0:6.3, thick, vert] {3};
+  \addplot[domain=1:5.5, samples=100, thick, rouge] {0.8+0.12*x^2};
+  \draw[dashed] (axis cs:0,0.92) -- (axis cs:1,0.92) -- (axis cs:1,0);
+  \draw[dashed] (axis cs:0,4.43) -- (axis cs:5.5,4.43) -- (axis cs:5.5,0);
+  \draw[dashed] (axis cs:4.282,3) -- (axis cs:4.282,0);
+  \fill (axis cs:4.282,3) circle (1.6pt);
+  \node[left] at (axis cs:0,4.43) {$f(b)$};
+  \node[left] at (axis cs:0,3) {$k$};
+  \node[left] at (axis cs:0,0.92) {$f(a)$};
+  \node[below] at (axis cs:1,0) {$a$};
+  \node[below] at (axis cs:4.282,0) {$c$};
+  \node[below] at (axis cs:5.5,0) {$b$};
+  \node[below left] at (axis cs:0,0) {$O$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+\begin{remarque}
+\begin{itemize}
+  \item Ce théorème est aussi appelé \textbf{théorème de la bijection}.
+  \item On généralise ce théorème à l'intervalle ouvert $I=\intoo{a}{b}$.
+        Le réel $k$ doit alors être strictement compris entre
+        $\limd{a}{f(x)}$ et $\limg{b}{f(x)}$.
+  \item Lorsque $k=0$, on pourra montrer que $f(a)\times f(b)<0$.
+  \item \textbf{Convention :} dans un tableau de variations, une flèche oblique
+        traduit la \textbf{continuité} et la \textbf{stricte monotonie} de la
+        fonction sur l'intervalle correspondant.
+\end{itemize}
+\end{remarque}
+
+\begin{methode}[Étudier une équation $f(x)=k$ : existence, unicité, encadrement]
+\begin{enumerate}
+  \item Justifier que $f$ est \textbf{continue} sur l'intervalle $I$ considéré.
+  \item Justifier que $f$ est \textbf{strictement monotone} sur $I$
+        (souvent par l'étude du signe de $f'$).
+  \item Calculer les images (ou les limites) aux bornes de $I$ et vérifier que
+        $k$ est compris entre ces valeurs.
+  \item Conclure avec le corollaire du TVI : l'équation $f(x)=k$ admet une
+        unique solution $\alpha$ dans $I$.
+  \item \textbf{Encadrer} $\alpha$ à l'aide de la calculatrice (balayage,
+        tableau de valeurs) ou d'un algorithme (dichotomie).
+\end{enumerate}
+\end{methode}
+
+\subsection{Exemples d'application}
+
+\begin{exemple}{Existence, unicité et encadrement d'une solution}{}
+Soit $f$ la fonction définie sur $\R$ par $f(x)=x^3+x-1$.
+
+Montrons que l'équation $f(x)=0$ admet une unique solution $\alpha$ dans $\R$,
+puis donnons-en un encadrement d'amplitude $10^{-2}$.
+
+\begin{etapes}
+  \item Continuité : $f$ est une fonction polynôme, donc continue et dérivable
+        sur $\R$.
+  \item Stricte monotonie : pour tout réel $x$, $f'(x)=3x^2+1>0$, donc $f$ est
+        strictement croissante sur $\R$.
+  \item Limites aux bornes :
+        $\limite{x\to-\infty}{f(x)}=\limite{x\to-\infty}{x^3}=-\infty$ \ et \
+        $\limite{x\to+\infty}{f(x)}=\limite{x\to+\infty}{x^3}=+\infty$.
+
+\begin{center}
+\setstretch{1}
+\begin{tikzpicture}
+\tkzTabInit[lgt=2.2, espcl=4]{$x$/1, $f'(x)$/1, $f(x)$/2}{$-\infty$, $+\infty$}
+\tkzTabLine{, +, }
+\tkzTabVar{-/$-\infty$, +/$+\infty$}
+\tkzTabVal{1}{2}{0.5}{$\alpha$}{$0$}
+\end{tikzpicture}
+\end{center}
+
+  \item Conclusion : comme $0\in\intoo{-\infty}{+\infty}$, d'après le corollaire
+        du TVI, l'équation $f(x)=0$ admet une unique solution $\alpha$ dans $\R$.
+  \item Encadrement : $f(0)=-1<0$ et $f(1)=1>0$, donc $0<\alpha<1$.
+
+        Par balayage avec un pas de $0{,}01$ :
+        \[
+          f(0{,}68)\approx -0{,}0056<0 \qquad\text{et}\qquad
+          f(0{,}69)\approx 0{,}0185>0.
+        \]
+        Comme $f$ est strictement croissante : $\boxed{0{,}68<\alpha<0{,}69}$.
+\end{etapes}
+\end{exemple}
+
+\begin{exemple}{Dénombrer les solutions à l'aide du tableau de variations}{}
+Soit $g$ la fonction définie sur $\R$ par $g(x)=x^3-3x+1$.
+
+Déterminons le nombre de solutions de l'équation $g(x)=0$.
+
+\begin{etapes}
+  \item Dérivée : $g$ est continue et dérivable sur $\R$, et
+        $g'(x)=3x^2-3=3(x-1)(x+1)$.
+  \item Valeurs et limites : $g(-1)=3$, \ $g(1)=-1$, \
+        $\limite{x\to-\infty}{g(x)}=-\infty$ \ et \
+        $\limite{x\to+\infty}{g(x)}=+\infty$.
+
+\begin{center}
+\setstretch{1}
+\begin{tikzpicture}
+\tkzTabInit[lgt=2.2, espcl=2.8]{$x$/1, $g'(x)$/1, $g(x)$/2.2}
+  {$-\infty$, $-1$, $1$, $+\infty$}
+\tkzTabLine{, +, z, -, z, +, }
+\tkzTabVar{-/$-\infty$, +/$3$, -/$-1$, +/$+\infty$}
+\end{tikzpicture}
+\end{center}
+
+  \item Étude sur chaque intervalle :
+  \begin{itemize}
+    \item sur $\intof{-\infty}{-1}$ : $g$ est continue, strictement croissante,
+          et $0\in\intof{-\infty}{3}$ ; d'où une unique solution $\alpha_1$ ;
+    \item sur $\intff{-1}{1}$ : $g$ est continue, strictement décroissante, et
+          $0\in\intff{-1}{3}$ ; d'où une unique solution $\alpha_2$ ;
+    \item sur $\intfo{1}{+\infty}$ : $g$ est continue, strictement croissante, et
+          $0\in\intfo{-1}{+\infty}$ ; d'où une unique solution $\alpha_3$.
+  \end{itemize}
+  \item Localisation : $g(-2)=-1$, $g(0)=1$ et $g(2)=3$, donc
+        $-2<\alpha_1<-1$, \ $0<\alpha_2<1$ \ et \ $1<\alpha_3<2$.
+\end{etapes}
+\textbf{Conclusion :} l'équation $g(x)=0$ admet exactement \textbf{trois solutions}
+dans $\R$.
+\end{exemple}
+
+\subsection{Algorithme de dichotomie}
+
+On suppose que $f$ est continue et strictement monotone sur $\intff{a}{b}$, avec
+$f(a)\times f(b)<0$.
+
+L'équation $f(x)=0$ admet donc une unique solution $\alpha\in\intff{a}{b}$.
+
+Le principe de la \textbf{dichotomie} consiste à couper l'intervalle en deux à
+chaque étape :
+\begin{etapes}
+  \item On calcule le milieu $m=\dfrac{a+b}{2}$.
+  \item Si $f(a)\times f(m)\leqslant 0$, alors $\alpha\in\intff{a}{m}$ et on
+        remplace $b$ par $m$ ; sinon $\alpha\in\intff{m}{b}$ et on remplace $a$
+        par $m$.
+  \item On recommence tant que l'amplitude $b-a$ est supérieure à la précision
+        $p$ souhaitée.
+\end{etapes}
+Après $n$ étapes, l'amplitude de l'intervalle est $\dfrac{b-a}{2^n}$.
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{lstlisting}
+def dichotomie(f, a, b, p):
+    while b - a > p:
+        m = (a + b) / 2
+        if f(a) * f(m) <= 0:
+            b = m
+        else:
+            a = m
+    return a, b
+
+def f(x):
+    return x**3 + x - 1
+
+print(dichotomie(f, 0, 1, 0.01))
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\linewidth}
+\begin{exemple}[unbreakable]{}{}
+Avec $f(x)=x^3+x-1$ sur $\intff{0}{1}$ et $p=0{,}01$, le programme affiche :
+\begin{center}
+\texttt{(0.6796875, 0.6875)}
+\end{center}
+Ainsi $0{,}679<\alpha<0{,}688$ après $7$ étapes, car
+$\frac{1}{2^7}\approx 0{,}0078<0{,}01$.
+
+Ce résultat est cohérent avec l'encadrement obtenu par balayage.
+\end{exemple}
+\end{minipage}
+
+\subsubsection{Déroulement de l'algorithme pas à pas}
+
+Le tableau ci-dessous détaille les $7$ étapes de l'algorithme pour
+$f(x)=x^3+x-1$ sur $\intff{0}{1}$ avec $p=0{,}01$
+(valeurs arrondies à $10^{-4}$). Comme $f(a)<0$ à chaque étape : si $f(m)<0$,
+la solution est dans $\intff{m}{b}$ ; si $f(m)>0$, elle est dans $\intff{a}{m}$.
+
+\begin{center}
+\setstretch{1}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\rowcolor{bleuclair}\textbf{Étape} & $a$ & $b$ & $m=\frac{a+b}{2}$ & $f(m)$ &
+  \textbf{Nouvel intervalle} \\ \hline
+1 & $0$ & $1$ & $0{,}5$ & $-0{,}375\,0$ & $\intff{0{,}5}{1}$ \\ \hline
+2 & $0{,}5$ & $1$ & $0{,}75$ & $0{,}171\,9$ & $\intff{0{,}5}{0{,}75}$ \\ \hline
+3 & $0{,}5$ & $0{,}75$ & $0{,}625$ & $-0{,}130\,9$ & $\intff{0{,}625}{0{,}75}$ \\ \hline
+4 & $0{,}625$ & $0{,}75$ & $0{,}687\,5$ & $0{,}012\,5$ & $\intff{0{,}625}{0{,}687\,5}$ \\ \hline
+5 & $0{,}625$ & $0{,}687\,5$ & $0{,}656\,25$ & $-0{,}061\,1$ & $\intff{0{,}656\,25}{0{,}687\,5}$ \\ \hline
+6 & $0{,}656\,25$ & $0{,}687\,5$ & $0{,}671\,875$ & $-0{,}024\,8$ & $\intff{0{,}671\,875}{0{,}687\,5}$ \\ \hline
+7 & $0{,}671\,875$ & $0{,}687\,5$ & $0{,}679\,687\,5$ & $-0{,}006\,3$ & $\intff{0{,}679\,687\,5}{0{,}687\,5}$ \\ \hline
+\multicolumn{6}{|c|}{Amplitude finale : $0{,}007\,812\,5<0{,}01$ \ $\Longrightarrow$ \ l'algorithme s'arrête.} \\ \hline
+\end{tabular}
+\end{center}
+
+% =====================================================================
+\section*{L'essentiel du chapitre}
+\addcontentsline{toc}{section}{L'essentiel du chapitre}
+% =====================================================================
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|>{\raggedright\arraybackslash}m{4.2cm}|>{\raggedright\arraybackslash}m{11.6cm}|}
+\hline
+\rowcolor{bleuclair}\textbf{Notion} & \textbf{À retenir} \\ \hline
+Continuité en $a$ & Limite à gauche en $a$ $=$ limite à droite en $a$ $=f(a)$ ;
+  la courbe se trace « sans lever le crayon ». \\ \hline
+Fonctions usuelles & Polynômes, $\e^x$, $\sin$, $\cos$, $\lvert x\rvert$ continues sur $\R$ ; $\sqrt{x}$ sur $\intfo{0}{+\infty}$ ; rationnelles sur leurs intervalles de définition. \\ \hline
+Opérations & Somme, produit, quotient (dénominateur non nul) et composée de fonctions continues sont continues. \\ \hline
+Dérivabilité & Dérivable $\Longrightarrow$ continue ; la réciproque est fausse ($\lvert x\rvert$, $\sqrt{x}$ en $0$). \\ \hline
+TVI & $f$ continue sur $\intff{a}{b}$, $k$ entre $f(a)$ et $f(b)$ : au moins une solution à $f(x)=k$. \\ \hline
+Corollaire & Si de plus $f$ est strictement monotone : une \textbf{unique} solution. \\ \hline
+Dichotomie & Encadrer une solution en coupant l'intervalle en deux à chaque étape. \\ \hline
+\end{tabular}
+\end{center}
+
+\end{document}

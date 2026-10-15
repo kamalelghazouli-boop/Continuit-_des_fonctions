@@ -1,0 +1,377 @@
+% =====================================================================
+%  Cours : «TITRE EN MAJUSCULES»
+%  Terminale — Spécialité Mathématiques
+%  Lycée Français International Jean CHARCOT — EL JADIDA
+%  Année scolaire 2026 - 2027
+%  Compilation : pdflatex (deux passes pour la table des matières)
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------------------
+%  Encodage, langue, polices
+% ---------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage{microtype}
+
+% ---------------------------------------------------------------------
+%  Mathématiques
+% ---------------------------------------------------------------------
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{mathrsfs}
+
+% ---------------------------------------------------------------------
+%  Mise en page
+% ---------------------------------------------------------------------
+\usepackage[a4paper,top=2.3cm,bottom=2.3cm,left=2cm,right=2cm,
+            headheight=15pt]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{array,booktabs}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{lastpage}
+\usepackage{needspace}
+\usepackage{setspace}
+\usepackage{tocloft}
+\setlength{\cftsecnumwidth}{2.6em}
+\setlength{\cftsubsecnumwidth}{2em}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+\renewcommand{\cfttoctitlefont}{\hfill\Large\bfseries\color{bleu}}
+\renewcommand{\cftaftertoctitle}{\hfill\hfill}
+\renewcommand{\cftsecfont}{\bfseries\color{bleu}}
+\renewcommand{\cftsecpagefont}{\bfseries\color{bleu}}
+\setlength{\cftbeforesecskip}{8pt}
+\tocloftpagestyle{fancy}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+
+% ---------------------------------------------------------------------
+%  Figures
+% ---------------------------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,babel}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tkz-tab}
+
+\usepackage[hidelinks]{hyperref}
+
+% ---------------------------------------------------------------------
+%  Interlignage aéré
+% ---------------------------------------------------------------------
+\setstretch{1.25}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt plus 2pt minus 1pt}
+\setlength{\abovedisplayskip}{9pt plus 2pt}
+\setlength{\belowdisplayskip}{9pt plus 2pt}
+
+% Ne jamais isoler une ligne en haut ou en bas de page
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
+
+% Remplissage des pages : aucune coupure « favorisée ».
+% \needspace{h} passe à la page suivante seulement si l'espace restant est < h,
+% sans insérer de pénalité négative (qui créerait des pages à moitié vides).
+\makeatletter
+\renewcommand{\needspace}[1]{\par\begingroup\setlength{\dimen@}{#1}%
+  \dimen@ii\pagegoal\advance\dimen@ii-\pagetotal
+  \ifdim\dimen@>\dimen@ii\ifdim\dimen@ii>\z@\vfil\fi\break\fi\endgroup}
+\@secpenalty=0
+\@beginparpenalty=0
+\@endparpenalty=0
+\@itempenalty=0
+\makeatother
+
+% ---------------------------------------------------------------------
+%  Couleurs
+% ---------------------------------------------------------------------
+\definecolor{bleu}{RGB}{20,55,120}
+\definecolor{bleuclair}{RGB}{232,240,252}
+\definecolor{rouge}{RGB}{170,30,45}
+\definecolor{rougeclair}{RGB}{252,236,236}
+\definecolor{vert}{RGB}{25,115,65}
+\definecolor{vertclair}{RGB}{233,247,238}
+\definecolor{orange}{RGB}{200,100,10}
+\definecolor{orangeclair}{RGB}{254,243,228}
+\definecolor{gris}{RGB}{90,90,90}
+\definecolor{grisclair}{RGB}{244,244,244}
+\definecolor{courbe}{RGB}{30,20,120}
+\definecolor{magenta}{RGB}{170,30,140}
+
+% ---------------------------------------------------------------------
+%  Titres de sections
+%  (\needspace empêche un titre d'être séparé de son texte)
+% ---------------------------------------------------------------------
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+\newcommand{\boitesection}[1]{\colorbox{bleu}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+  \strut\thesection~--~#1}}}
+\newcommand{\boitesectionetoile}[1]{\colorbox{bleu}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+  \strut#1}}}
+\newif\ifapressection
+\titleformat{\section}
+  {\needspace{16\baselineskip}\global\apressectiontrue\normalfont\Large\bfseries\color{white}}
+  {}{0pt}{\boitesection}
+\titleformat{name=\section,numberless}
+  {\needspace{9\baselineskip}\normalfont\Large\bfseries\color{white}}
+  {}{0pt}{\boitesectionetoile}
+\titlespacing*{\section}{0pt}{18pt}{12pt}
+\titleformat{\subsection}
+  {\ifapressection\global\apressectionfalse\else\needspace{8\baselineskip}\fi
+   \normalfont\large\bfseries\color{bleu}}
+  {\thesubsection}{0.6em}{}[{\color{bleu}\titlerule[0.6pt]}]
+\titlespacing*{\subsection}{0pt}{14pt}{8pt}
+\titleformat{\subsubsection}
+  {\needspace{7\baselineskip}\normalfont\normalsize\bfseries\color{bleu!80!black}}
+  {}{0pt}{$\blacktriangleright$~}
+\titlespacing*{\subsubsection}{0pt}{10pt}{6pt}
+
+% ---------------------------------------------------------------------
+%  En-têtes et pieds de page
+% ---------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gris}Cours -- «Titre du chapitre»}
+\fancyhead[R]{\small\color{gris}TSpeMath}
+\fancyfoot[L]{\small\color{gris}LFI Jean CHARCOT -- EL JADIDA}
+\fancyfoot[C]{\small\color{gris}\thepage/\pageref{LastPage}}
+\fancyfoot[R]{\small\color{gris}K. EL GHAZOULI}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% ---------------------------------------------------------------------
+%  Environnements (tcolorbox)
+% ---------------------------------------------------------------------
+\tcbset{
+  basecours/.style={enhanced, sharp corners=south,
+    arc=2mm, boxrule=0.8pt, left=3mm, right=3mm, top=2.5mm, bottom=2.5mm,
+    fonttitle=\bfseries, separator sign dash, toptitle=1mm, bottomtitle=1mm,
+    before upper pre={\setlength{\parskip}{6pt}}, before pre={\par\needspace{6\baselineskip}},
+    before skip=12pt, after skip=12pt},
+  baselateral/.style={enhanced, sharp corners, boxrule=0pt, leftrule=1.2mm,
+    left=4mm, right=3mm, top=2.5mm, bottom=2.5mm, fonttitle=\bfseries,
+    attach title to upper, after title={\ :\par\smallskip},
+    before upper pre={\setlength{\parskip}{6pt}}, before pre={\par\needspace{6\baselineskip}},
+    before skip=12pt, after skip=12pt},
+}
+
+\newtcbtheorem[number within=section]{definition}{Définition}{
+  basecours, colback=bleuclair, colframe=bleu, coltitle=white}{def}
+
+\newtcbtheorem[use counter from=definition]{theoreme}{Théorème}{
+  basecours, colback=rougeclair, colframe=rouge, coltitle=white}{thm}
+
+\newtcbtheorem[use counter from=definition]{corollaire}{Corollaire}{
+  basecours, colback=rougeclair, colframe=rouge!80!black, coltitle=white}{cor}
+
+\newtcbtheorem[number within=section]{exemple}{Exemple}{
+  baselateral, breakable, colback=vertclair, colframe=vert, coltitle=vert,
+  separator sign dash}{ex}
+
+\newtcolorbox{remarque}[1][Remarque]{
+  baselateral, colback=grisclair, colframe=gris, coltitle=gris, title={#1}}
+
+\newtcolorbox{methode}[1][]{
+  basecours, sharp corners=all, colback=orangeclair, colframe=orange,
+  coltitle=white, title={Méthode\ifx&#1&\else~--~#1\fi}}
+
+\newtcolorbox{demo}[1][]{
+  enhanced, breakable, colback=white, colframe=gris!60, boxrule=0.4pt,
+  sharp corners, left=4mm, right=3mm, top=2.5mm, bottom=2.5mm,
+  title={Démonstration}, attach title to upper, after title={\ :\par\smallskip},
+  coltitle=gris, fonttitle=\bfseries\itshape,
+  before upper pre={\setlength{\parskip}{6pt}}, before pre={\par\needspace{6\baselineskip}},
+  before skip=12pt, after skip=12pt, #1}
+
+\newtcolorbox{programme}{
+  enhanced, colback=bleuclair!50, colframe=bleu, boxrule=0.6pt, arc=2mm,
+  title={Extrait du programme officiel (B.O.) -- Terminale spécialité},
+  coltitle=white, colbacktitle=bleu, fonttitle=\bfseries,
+  left=3mm, right=3mm, top=2mm, bottom=2mm}
+
+
+% Étapes de résolution : une étape par ligne
+\newlist{etapes}{enumerate}{1}
+\setlist[etapes]{label={\color{vert}\bfseries Étape \arabic*.}, leftmargin=0pt,
+  labelindent=0pt, itemindent=*, labelsep=0.5em, itemsep=6pt, topsep=6pt,
+  parsep=4pt}
+
+% ---------------------------------------------------------------------
+%  Macros mathématiques
+% ---------------------------------------------------------------------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Cf}{\mathscr{C}_f}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\intff}[2]{\mathopen{[}#1\,;\,#2\mathclose{]}}
+\newcommand{\intoo}[2]{\mathopen{]}#1\,;\,#2\mathclose{[}}
+\newcommand{\intfo}[2]{\mathopen{[}#1\,;\,#2\mathclose{[}}
+\newcommand{\intof}[2]{\mathopen{]}#1\,;\,#2\mathclose{]}}
+\newcommand{\limite}[2]{\lim\limits_{#1}#2}
+% limites à gauche et à droite en a
+\newcommand{\limg}[2]{\lim\limits_{x\to #1^-}#2}
+\newcommand{\limd}[2]{\lim\limits_{x\to #1^+}#2}
+
+% ---------------------------------------------------------------------
+%  Code Python
+% ---------------------------------------------------------------------
+\lstset{
+  language=Python, basicstyle=\ttfamily\small\linespread{1}\selectfont,
+  keywordstyle=\color{bleu}\bfseries,
+  commentstyle=\color{vert}\itshape, stringstyle=\color{rouge},
+  numbers=left, numberstyle=\tiny\color{gris}, frame=single,
+  rulecolor=\color{gris!50}, backgroundcolor=\color{grisclair},
+  showstringspaces=false, columns=fullflexible, keepspaces=true,
+  literate={é}{{\'e}}1 {è}{{\`e}}1 {à}{{\`a}}1 {ê}{{\^e}}1
+}
+
+\setlist[itemize]{label=\textcolor{bleu}{$\bullet$}, leftmargin=*, itemsep=5pt,
+  topsep=5pt}
+\setlist[enumerate]{leftmargin=*, itemsep=5pt, topsep=5pt}
+
+% =====================================================================
+\begin{document}
+% =====================================================================
+
+% ---------------------------------------------------------------------
+%  PAGE DE GARDE
+% ---------------------------------------------------------------------
+\begin{titlepage}
+\setstretch{1}
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[bleu] (current page.north west) rectangle
+              ([yshift=-0.9cm]current page.north east);
+  \fill[bleu] (current page.south west) rectangle
+              ([yshift=0.9cm]current page.south east);
+  \draw[bleu, line width=1.2pt]
+    ([xshift=1.2cm,yshift=-1.4cm]current page.north west) rectangle
+    ([xshift=-1.2cm,yshift=1.4cm]current page.south east);
+\end{tikzpicture}
+
+\centering
+\vspace*{0.6cm}
+
+{\Large\bfseries\color{bleu} Lycée Français International Jean CHARCOT - EL JADIDA\par}
+\vspace{0.5cm}
+{\large Année scolaire 2026 - 2027\par}
+\vspace{0.3cm}
+{\large\bfseries Niveau : Terminale Spécialité Mathématiques\par}
+
+\vspace{0.8cm}
+{\color{bleu}\rule{0.85\linewidth}{1.2pt}}
+
+\vspace{2.6cm}
+
+\begin{tcolorbox}[enhanced, width=0.9\linewidth, colback=bleuclair,
+  colframe=bleu, boxrule=1.5pt, arc=3mm, halign=center,
+  top=8mm, bottom=8mm, drop shadow]
+  {\fontsize{32}{40}\selectfont\bfseries\color{bleu}
+   «LIGNE 1 DU TITRE»\\[3mm] «LIGNE 2 DU TITRE»\par}
+  \vspace{4mm}
+  {\large\itshape Cours, propriétés, démonstrations et exemples d'application\par}
+\end{tcolorbox}
+
+\vspace{1.4cm}
+
+% Illustration : théorème des valeurs intermédiaires
+\begin{tikzpicture}
+\begin{axis}[axis lines=middle, width=10cm, height=6cm,
+  xmin=0, xmax=6.2, ymin=0, ymax=3.6, xtick=\empty, ytick=\empty,
+  xlabel={$x$}, ylabel={$y$}, clip=false,
+  every axis x label/.style={at={(ticklabel* cs:1)}, anchor=west},
+  every axis y label/.style={at={(ticklabel* cs:1)}, anchor=south}]
+  \addplot[domain=1:5.6, samples=150, very thick, rouge]
+     {2-sin(deg(pi*(x-2)/1.4))};
+  \addplot[domain=0:6.2, thick, vert] {2};
+  \foreach \c in {2,3.4,4.8}{
+    \edef\temp{\noexpand\draw[dashed, gris] (axis cs:\c,0) -- (axis cs:\c,2);
+               \noexpand\fill[bleu] (axis cs:\c,2) circle (2pt);}
+    \temp
+  }
+  \node[left] at (axis cs:0,2) {$k$};
+  \node[above, rouge] at (axis cs:5.6,1.05) {$\Cf$};
+\end{axis}
+\end{tikzpicture}
+
+\vfill
+{\large Enseignant : K. EL GHAZOULI\par}
+\vspace{0.6cm}
+\end{titlepage}
+
+% ---------------------------------------------------------------------
+%  SOMMAIRE ET PROGRAMME
+% ---------------------------------------------------------------------
+\setcounter{page}{1}
+\begingroup
+\hypersetup{linkcolor=bleu}
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+\endgroup
+
+\vspace{0.8cm}
+
+\begin{programme}
+\textbf{Contenus}
+\begin{itemize}
+  \item «Contenus du B.O. pour ce chapitre»
+\end{itemize}
+\textbf{Capacités attendues}
+\begin{itemize}
+  \item «Capacités attendues du B.O.»
+\end{itemize}
+\textbf{Démonstrations / algorithmes / approfondissements} : «si le B.O. en prévoit».
+\end{programme}
+
+\begin{remarque}[Convention]
+«Conventions et notations du chapitre.»
+\end{remarque}
+
+\newpage
+% =====================================================================
+\section{«Première partie»}
+% =====================================================================
+
+\subsection{«Notion»}
+
+«Phrase d'introduction (intuition).»
+
+\begin{definition}{«Titre»}{«label»}
+«Énoncé rigoureux.»
+\end{definition}
+
+\begin{remarque}
+«Remarque courte.»
+\end{remarque}
+
+\subsection{Exemples d'application}
+
+\begin{exemple}{«Titre de l'exemple»}{}
+«Énoncé.»
+\begin{etapes}
+  \item «Première étape : une idée par étape.»
+  \item «Deuxième étape.»
+\end{etapes}
+\textbf{Conclusion :} «conclusion.»
+\end{exemple}
+
+% =====================================================================
+\section*{L'essentiel du chapitre}
+\addcontentsline{toc}{section}{L'essentiel du chapitre}
+% =====================================================================
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|>{\raggedright\arraybackslash}m{4.2cm}|>{\raggedright\arraybackslash}m{11.6cm}|}
+\hline
+\rowcolor{bleuclair}\textbf{Notion} & \textbf{À retenir} \\ \hline
+«Notion» & «À retenir» \\ \hline
+\end{tabular}
+\end{center}
+
+\end{document}
